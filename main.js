@@ -11,10 +11,20 @@ class Game {
 }
 
 class Stack {
-  constructor(cards) {
+  constructor(cards, onCardsSelected) {
     this.state = {
       cards: cards,
     }
+
+    this._element.addEventListener('click', (event) => {
+      const card = event.target.closest('.card');
+
+      if (!card) {
+        return;
+      }
+
+      onCardsSelected()
+    });
   }
 
   render() {
@@ -35,10 +45,12 @@ class Stack {
 }
 
 class Card {
-  constructor({ suit, sign }) {
-    this.state = {
-      isOpen: false,
-    }
+  constructor(card) {
+    this.element.addEventListener('click', () => {
+      this.element.dispatchEvent(new CustomEvent('cardSelected', {
+        detail: card,
+      }))
+    })
   }
 
   render() {
